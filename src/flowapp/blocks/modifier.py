@@ -14,7 +14,7 @@ def scaler() -> Block:
     block.add_output(name="Out(df)")
 
     def compute_func(self: Any) -> None:
-        df = self.get_interface(name="Input 1")
+        df = self.get_interface(name="In(df)")
         scaling_type = self.get_option(name="select scaling type")
         if scaling_type == "Normalization":
             df = (df - df.min()) / (df.max() - df.min())
