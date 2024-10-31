@@ -37,3 +37,18 @@ def dropna() -> Block:
 
     block.add_compute(compute_func)
     return block
+
+
+def dropcolumn() -> Block:
+    block = Block(name="Drop col")
+    block.add_input(name="In(df)")
+    block.add_output(name="Out(df)")
+    block.add_option(name="Column", type="input")
+
+    def compute_func(self: Any) -> None:
+        df = self.get_interface(name="In(df)")
+        col = self.get_option(name="Column")
+        self.set_interface(name="Out(df)", value=df.loc[:, df.columns != col])
+
+    block.add_compute(compute_func)
+    return block

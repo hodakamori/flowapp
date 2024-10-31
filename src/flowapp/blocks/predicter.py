@@ -15,4 +15,5 @@ def predict() -> Block:
         y_pred = model.predict(X)
         self.set_interface(name="Out(y, df)", value=y_pred)
 
+    block.add_compute(compute_func)
     return block

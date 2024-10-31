@@ -21,7 +21,6 @@ def regression_score() -> Block:
         metric = self.get_option(name="select metric")
         y_true = self.get_interface(name="In(y_true, df)")
         y_pred = self.get_interface(name="Out(y_pred, df)")
-
         if metric == "MAE":
             score = mean_absolute_error(y_true, y_pred)
         elif metric == "R2":
@@ -29,6 +28,7 @@ def regression_score() -> Block:
         elif metric == "RMSE":
             score = mean_squared_error(y_true, y_pred, squared=False)
         self.set_interface(name="Score", value=score)
+        print(score)
 
     block.add_compute(compute_func)
     return block

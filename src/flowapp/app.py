@@ -5,9 +5,9 @@ from barfi import barfi_schemas, st_barfi
 
 from flowapp.blocks.dataloader import csv_loader
 from flowapp.blocks.evaluator import regression_score
-from flowapp.blocks.ml import train_regression
-from flowapp.blocks.modifier import dropna, scaler
+from flowapp.blocks.modifier import dropcolumn, dropna, scaler
 from flowapp.blocks.predicter import predict
+from flowapp.blocks.regression import train_regression
 from flowapp.blocks.saver import save_as_csv
 from flowapp.blocks.selecter import xy_selecter
 from flowapp.blocks.splitter import train_test_splitter
@@ -22,6 +22,7 @@ barfi_result = st_barfi(
         scaler(),
         train_test_splitter(),
         dropna(),
+        dropcolumn(),
         xy_selecter(),
         train_regression(),
         predict(),
