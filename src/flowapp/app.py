@@ -11,6 +11,7 @@ from flowapp.blocks.regression import train_regression
 from flowapp.blocks.saver import save_as_csv
 from flowapp.blocks.selecter import xy_selecter
 from flowapp.blocks.splitter import train_test_splitter
+from flowapp.blocks.visualizers import scatter
 from flowapp.components.visualizers import visualize_block_details
 
 st.set_page_config(layout="wide")
@@ -33,6 +34,7 @@ with col1:
             predict(),
             regression_score(),
             save_as_csv(),
+            scatter(),
         ],
         compute_engine=True,
         load_schema=load_schema,
