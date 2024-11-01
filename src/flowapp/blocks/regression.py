@@ -5,7 +5,7 @@ from sklearn.linear_model import LinearRegression
 
 
 def train_regression() -> Block:
-    block = Block(name="Train Regression")
+    block = Block(name="Regression")
     block.add_option(
         name="select model",
         type="select",

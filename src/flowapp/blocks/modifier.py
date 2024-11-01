@@ -27,7 +27,7 @@ def scaler() -> Block:
 
 
 def dropna() -> Block:
-    block = Block(name="DropNaN")
+    block = Block(name="Drop NaN")
     block.add_input(name="In(df)")
     block.add_output(name="Out(df)")
 

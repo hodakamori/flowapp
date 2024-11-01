@@ -52,3 +52,54 @@ def column_selectable_scatter(df: pd.DataFrame) -> go.Figure:
         height=600,
     )
     return fig
+
+
+def create_parity_plot(
+    y_train_true: pd.DataFrame,
+    y_train_pred: pd.DataFrame,
+    y_test_true: pd.DataFrame,
+    y_test_pred: pd.DataFrame,
+) -> go.Figure:
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=y_train_true,
+            y=y_train_pred,
+            mode="markers",
+            marker=dict(size=8),
+            name="train",
+        )
+    )
+    fig.add_trace(
+        go.Scatter(
+            x=y_test_true,
+            y=y_test_pred,
+            mode="markers",
+            marker=dict(size=8),
+            name="test",
+        )
+    )
+    min_val = min(
+        y_train_true.min(), y_train_pred.min(), y_test_true.min(), y_test_pred.min()
+    )
+    max_val = max(
+        y_train_true.max(), y_train_pred.max(), y_test_true.max(), y_test_pred.max()
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=[min_val, max_val],
+            y=[min_val, max_val],
+            mode="lines",
+            line=dict(color="gray", dash="dash"),
+            name="y=x",
+        )
+    )
+
+    fig.update_layout(
+        xaxis=dict(scaleanchor="y", scaleratio=1, range=[min_val, max_val]),
+        yaxis=dict(scaleanchor="x", scaleratio=1, range=[min_val, max_val]),
+        legend=dict(title="Data Type"),
+    )
+
+    return fig

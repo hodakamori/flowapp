@@ -66,6 +66,8 @@ pandas==2.2.3
     # via streamlit
 pillow==10.4.0
     # via streamlit
+pip==24.3.1
+    # via flowapp
 plotly==5.24.1
     # via flowapp
 protobuf==5.28.3
