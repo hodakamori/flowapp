@@ -11,27 +11,34 @@ from flowapp.blocks.regression import train_regression
 from flowapp.blocks.saver import save_as_csv
 from flowapp.blocks.selecter import xy_selecter
 from flowapp.blocks.splitter import train_test_splitter
+from flowapp.components.visualizers import visualize_block_details
 
 st.set_page_config(layout="wide")
-saved_schemas: List[str] = barfi_schemas()
-load_schema = st.selectbox("Select a saved schema:", saved_schemas)
 
-barfi_result = st_barfi(
-    base_blocks=[
-        csv_loader(),
-        scaler(),
-        train_test_splitter(),
-        dropna(),
-        dropcolumn(),
-        xy_selecter(),
-        train_regression(),
-        predict(),
-        regression_score(),
-        save_as_csv(),
-    ],
-    compute_engine=True,
-    load_schema=load_schema,
-)
+col1, col2 = st.columns([7, 3])
 
-if barfi_result:
-    st.write(barfi_result)
+with col1:
+    st.header("Flow")
+    saved_schemas: List[str] = barfi_schemas()
+    load_schema = st.selectbox("Select a saved schema:", saved_schemas)
+    barfi_result = st_barfi(
+        base_blocks=[
+            csv_loader(),
+            scaler(),
+            train_test_splitter(),
+            dropna(),
+            dropcolumn(),
+            xy_selecter(),
+            train_regression(),
+            predict(),
+            regression_score(),
+            save_as_csv(),
+        ],
+        compute_engine=True,
+        load_schema=load_schema,
+    )
+
+with col2:
+    st.header("Block Details")
+    if barfi_result:
+        visualize_block_details(barfi_result)

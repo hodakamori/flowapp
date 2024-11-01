@@ -28,7 +28,6 @@ def regression_score() -> Block:
         elif metric == "RMSE":
             score = mean_squared_error(y_true, y_pred, squared=False)
         self.set_interface(name="Score", value=score)
-        print(score)
 
     block.add_compute(compute_func)
     return block
