@@ -66,7 +66,7 @@ def create_parity_plot(
             x=y_train_true,
             y=y_train_pred,
             mode="markers",
-            marker=dict(size=8),
+            marker=dict(size=8, opacity=0.5),
             name="train",
         )
     )
@@ -75,17 +75,22 @@ def create_parity_plot(
             x=y_test_true,
             y=y_test_pred,
             mode="markers",
-            marker=dict(size=8),
+            marker=dict(size=8, opacity=0.5),
             name="test",
         )
     )
     min_val = min(
-        y_train_true.min(), y_train_pred.min(), y_test_true.min(), y_test_pred.min()
+        y_train_true.min() if y_train_true is not None else float("inf"),
+        y_train_pred.min() if y_train_pred is not None else float("inf"),
+        y_test_true.min() if y_test_true is not None else float("inf"),
+        y_test_pred.min() if y_test_pred is not None else float("inf"),
     )
     max_val = max(
-        y_train_true.max(), y_train_pred.max(), y_test_true.max(), y_test_pred.max()
+        y_train_true.max() if y_train_true is not None else float("-inf"),
+        y_train_pred.max() if y_train_pred is not None else float("-inf"),
+        y_test_true.max() if y_test_true is not None else float("-inf"),
+        y_test_pred.max() if y_test_pred is not None else float("-inf"),
     )
-
     fig.add_trace(
         go.Scatter(
             x=[min_val, max_val],
@@ -97,9 +102,14 @@ def create_parity_plot(
     )
 
     fig.update_layout(
-        xaxis=dict(scaleanchor="y", scaleratio=1, range=[min_val, max_val]),
-        yaxis=dict(scaleanchor="x", scaleratio=1, range=[min_val, max_val]),
-        legend=dict(title="Data Type"),
+        xaxis=dict(
+            title="Predicted", scaleanchor="y", scaleratio=1, range=[min_val, max_val]
+        ),
+        yaxis=dict(
+            title="Actual", scaleanchor="x", scaleratio=1, range=[min_val, max_val]
+        ),
+        legend=dict(title="Data"),
+        margin=dict(l=0, r=0, t=50, b=50),
     )
 
     return fig

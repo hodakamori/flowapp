@@ -36,7 +36,6 @@ def parity_plot() -> Block:
         y_train_pred = self.get_interface(name="In(y_train_pred)")
         y_test_true = self.get_interface(name="In(y_test_true)")
         y_test_pred = self.get_interface(name="In(y_test_pred)")
-
         fig = create_parity_plot(y_train_true, y_train_pred, y_test_true, y_test_pred)
 
         self.set_interface(name="Figure", value=fig)

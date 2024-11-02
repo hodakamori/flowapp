@@ -97,6 +97,7 @@ nodeenv==1.9.1
 numpy==2.1.2
     # via pandas
     # via pydeck
+    # via rdkit
     # via scikit-learn
     # via scipy
     # via streamlit
@@ -115,6 +116,7 @@ pathspec==0.12.1
 pexpect==4.9.0
     # via ipython
 pillow==10.4.0
+    # via rdkit
     # via streamlit
 pip==24.3.1
     # via flowapp
@@ -152,6 +154,8 @@ pyyaml==6.0.2
 pyzmq==26.2.0
     # via ipykernel
     # via jupyter-client
+rdkit==2024.3.5
+    # via flowapp
 referencing==0.35.1
     # via jsonschema
     # via jsonschema-specifications

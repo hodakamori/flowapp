@@ -3,12 +3,13 @@ from typing import Any
 import numpy as np
 import pandas as pd
 from barfi import Block
+from rdkit import Chem
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 
 
 def onehot_encoding() -> Block:
-    block = Block(name="OHE")
+    block = Block(name="One hot encoding")
     block.add_input(name="In(df)")
     block.add_output(name="Out(df)")
     block.add_option(
@@ -46,6 +47,36 @@ def onehot_encoding() -> Block:
         encoded_df = pd.DataFrame(
             encoded_array, columns=all_feature_names, index=df.index
         )
+        self.set_interface(name="Out(df)", value=encoded_df)
+
+    block.add_compute(compute_func)
+    return block
+
+
+def smi2fp() -> Block:
+    block = Block(name="Smiles to Fingerprint")
+    block.add_input(name="In(df)")
+    block.add_output(name="Out(df)")
+    block.add_option(
+        name="select y",
+        type="input",
+    )
+
+    def compute_func(self: Any) -> None:
+        df = self.get_interface(name="In(df)")
+        col = self.get_option(name="select y")
+        rdkitfp_feat = []
+        for smi in df[col].values:
+            mol = Chem.MolFromSmiles(smi)
+            fp_rdkit = Chem.RDKFingerprint(mol)
+            rdkitfp_feat.append(fp_rdkit.ToList())
+        rdkitfp_feat_df = pd.DataFrame(
+            rdkitfp_feat,
+        )
+        rdkitfp_feat_df.columns = [
+            f"rdkit_{i}" for i in range(rdkitfp_feat_df.shape[1])
+        ]
+        encoded_df = pd.concat([df, rdkitfp_feat_df], axis=1).drop(col, axis=1)
         self.set_interface(name="Out(df)", value=encoded_df)
 
     block.add_compute(compute_func)
