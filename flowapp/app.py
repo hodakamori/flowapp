@@ -7,7 +7,7 @@ import streamlit as st
 from barfi import barfi_schemas, st_barfi
 from dotenv import load_dotenv
 
-from flowapp.blocks.dataloader import csv_loader
+from flowapp.blocks.dataloader import csv_loader, pdb_loader, smiles_loader
 from flowapp.blocks.descriptors import onehot_encoding, smi2fp
 from flowapp.blocks.evaluator import regression_score
 from flowapp.blocks.modifier import dropcolumn, dropna, scaler
@@ -16,7 +16,7 @@ from flowapp.blocks.regression import train_regression
 from flowapp.blocks.saver import save_as_csv
 from flowapp.blocks.selecter import xy_selecter
 from flowapp.blocks.splitter import train_test_splitter
-from flowapp.blocks.visualizers import parity_plot, scatter
+from flowapp.blocks.visualizers import parity_plot, scatter, view_mol3d
 from flowapp.components.block_visualizer import visualize_block_details
 from flowapp.components.file_handler import file_uploader
 
@@ -40,22 +40,31 @@ with col1:
     saved_schemas: List[str] = barfi_schemas()
     load_schema = st.selectbox("Select a saved schema:", saved_schemas)
     barfi_result = st_barfi(
-        base_blocks=[
-            csv_loader(),
-            scaler(),
-            train_test_splitter(),
-            dropna(),
-            dropcolumn(),
-            onehot_encoding(),
-            smi2fp(),
-            xy_selecter(),
-            train_regression(),
-            predict(),
-            regression_score(),
-            save_as_csv(),
-            scatter(),
-            parity_plot(),
-        ],
+        base_blocks={
+            "Data": [
+                csv_loader(),
+                pdb_loader(),
+                smiles_loader(),
+            ],
+            "Modifier": [scaler(), dropna(), dropcolumn(), onehot_encoding(), smi2fp()],
+            "Selecter": [
+                train_test_splitter(),
+                xy_selecter(),
+            ],
+            "ML": [
+                train_regression(),
+                predict(),
+                regression_score(),
+            ],
+            "Visualize": [
+                scatter(),
+                parity_plot(),
+                view_mol3d(),
+            ],
+            "Othres": [
+                save_as_csv(),
+            ],
+        },
         compute_engine=True,
         load_schema=load_schema,
     )

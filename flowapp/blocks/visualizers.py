@@ -1,6 +1,8 @@
 from typing import Any
 
+import py3Dmol
 from barfi import Block
+from rdkit import Chem
 
 from flowapp.components.plots import column_selectable_scatter, create_parity_plot
 
@@ -39,6 +41,22 @@ def parity_plot() -> Block:
         fig = create_parity_plot(y_train_true, y_train_pred, y_test_true, y_test_pred)
 
         self.set_interface(name="Figure", value=fig)
+
+    block.add_compute(compute_func)
+    return block
+
+
+def view_mol3d() -> Block:
+    block = Block(name="3D Molecule Viewer")
+    block.add_input(name="In(mol)")
+    block.add_output(name="Figure")
+
+    def compute_func(self: Any) -> None:
+        mol = self.get_interface(name="In(mol)")
+        sdf2 = Chem.MolToMolBlock(mol)
+        view = py3Dmol.view(data=sdf2)
+        view.setStyle({"stick": {}, "sphere": {"scale": 0.3}})
+        self.set_interface(name="Figure", value=view)
 
     block.add_compute(compute_func)
     return block

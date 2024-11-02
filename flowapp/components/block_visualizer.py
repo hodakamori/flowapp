@@ -1,6 +1,8 @@
 from typing import Any, Dict
 
+import py3Dmol
 import streamlit as st
+from stmol import showmol
 
 
 def visualize_block_details(barfi_result: Dict[Any, Any]) -> None:
@@ -12,4 +14,7 @@ def visualize_block_details(barfi_result: Dict[Any, Any]) -> None:
         selected_key = st.selectbox("Select:", block_keys)
         if selected_key:
             value = barfi_result[selected_block]["block"].get_interface(selected_key)
-            st.write(value)
+            if isinstance(value, py3Dmol.view):
+                showmol(value)
+            else:
+                st.write(value)
