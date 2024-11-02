@@ -15,6 +15,8 @@ You can install flowapp using the following commands:
 ```sh
 git clone https://github.com/hodakamori/flowapp.git
 cd flowapp
-rye sync --no-lock
-rye run flowapp
+conda-lock install -n flowapp conda-lock.yml
+conda activate flowapp
+pip install -e .
+streamlit run flowapp/app.py
 ```
