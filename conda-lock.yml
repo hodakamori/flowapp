@@ -13,7 +13,7 @@
 version: 1
 metadata:
   content_hash:
-    linux-64: af846735a8a25022ef5036b45f3c206d4eee1b374c60293694760376e306dc80
+    linux-64: 98f10c835c50447b46d0f79fb82b999260447fcc28dc2b832beea8340ffa93ff
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -946,6 +946,18 @@ package:
     sha256: 300b2e714f59403df0560174f5ef6c19db8b4a3b74a7244862cf771f07dee8fb
   category: main
   optional: false
+- name: docutils
+  version: 0.21.2
+  manager: conda
+  platform: linux-64
+  dependencies:
+    python: '>=3.9'
+  url: https://conda.anaconda.org/conda-forge/noarch/docutils-0.21.2-pyhd8ed1ab_0.conda
+  hash:
+    md5: e8cd5d629f65bdf0f3bb312cde14659e
+    sha256: 362bfe3afaac18298c48c0c6a935641544077ce5105a42a2d8ebe750ad07c574
+  category: main
+  optional: false
 - name: ensureconda
   version: 1.4.4
   manager: conda
@@ -1011,6 +1023,35 @@ package:
   hash:
     md5: 916f8ec5dd4128cd5f207a3c4c07b2c6
     sha256: 1da766da9dba05091af87977922fe60dc7464091a9ccffb3765d403189d39be4
+  category: main
+  optional: false
+- name: flit
+  version: 3.10.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    docutils: ''
+    flit-core: 3.10.0.*
+    pip: ''
+    python: '>=3.6'
+    requests: ''
+    tomli-w: ''
+  url: https://conda.anaconda.org/conda-forge/noarch/flit-3.10.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: 5f80a283498c07cf55838c8d8962c351
+    sha256: e2450289a08d2fc7fc0f25ff1a5fe9bda1c9a1f1af43e4584fe685865acca49a
+  category: main
+  optional: false
+- name: flit-core
+  version: 3.10.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    python: '>=3.8'
+  url: https://conda.anaconda.org/conda-forge/noarch/flit-core-3.10.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: c895a02470771361be9dc39196ee365c
+    sha256: b0f1e4ba9a0700938524a64249488b334cb0e1a02df6d64aa6b951f74202a715
   category: main
   optional: false
 - name: fmt
@@ -4022,6 +4063,18 @@ package:
   hash:
     md5: e977934e00b355ff55ed154904044727
     sha256: 5e742ba856168b606ac3c814d247657b1c33b8042371f1a08000bdc5075bc0cc
+  category: main
+  optional: false
+- name: tomli-w
+  version: 1.1.0
+  manager: conda
+  platform: linux-64
+  dependencies:
+    python: '>=3.9'
+  url: https://conda.anaconda.org/conda-forge/noarch/tomli-w-1.1.0-pyhd8ed1ab_0.conda
+  hash:
+    md5: 2c5eb5b3a0fd2c4787d8162f57da2a20
+    sha256: 25b88bb2c4e79be642d8e5b5738781404055cd596403a20511e6fa30f0c71585
   category: main
   optional: false
 - name: tomlkit
