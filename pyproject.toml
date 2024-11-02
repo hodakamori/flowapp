@@ -5,38 +5,13 @@ description = "Add your description here"
 authors = [
     { name = "Hodaka Mori", email = "hodaka.mori.office@gmail.com" }
 ]
-dependencies = [
-    "streamlit>=1.39.0",
-    "barfi>=0.7.0",
-    "scikit-learn>=1.5.2",
-    "plotly>=5.24.1",
-    "pip>=24.3.1",
-    "rdkit>=2024.3.5",
-    "python-dotenv>=1.0.1",
-]
+
 readme = "README.md"
 requires-python = ">= 3.8"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
-[tool.rye]
-managed = true
-dev-dependencies = [
-    "ruff>=0.7.1",
-    "isort>=5.13.2",
-    "black>=24.10.0",
-    "mypy>=1.13.0",
-    "pre-commit>=4.0.1",
-    "ipykernel>=6.29.5",
-]
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/flowapp"]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
 
 [tool.ruff]
 line-length = 88
