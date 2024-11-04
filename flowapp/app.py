@@ -12,6 +12,7 @@ from flowapp.blocks.descriptors import onehot_encoding, smi2fp
 from flowapp.blocks.evaluator import regression_score
 from flowapp.blocks.modifier import dropcolumn, dropna, scaler
 from flowapp.blocks.predicter import predict
+from flowapp.blocks.qm import opt
 from flowapp.blocks.regression import train_regression
 from flowapp.blocks.saver import save_as_csv
 from flowapp.blocks.selecter import xy_selecter
@@ -50,6 +51,9 @@ with col1:
             "Selecter": [
                 train_test_splitter(),
                 xy_selecter(),
+            ],
+            "QM": [
+                opt(),
             ],
             "ML": [
                 train_regression(),
