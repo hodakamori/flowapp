@@ -1,6 +1,4 @@
 # flowapp
-
-## Overview
 flowapp is a flow-based programming tool designed for materials informatics and computational science applications.
 
 ### Geometry optimization by Quantum mechanics
@@ -13,9 +11,6 @@ flowapp is a flow-based programming tool designed for materials informatics and 
 - Simple and intuitive user interface
 - Easy to extend: Add any custom processing by writing Python code
 - Built for data pipeline management and monitoring
-
-## Description
-flowapp is a tool designed to simplify data flow management and processing. This project aims to make it easy to build, manage, and monitor data pipelines.
 
 ## Prerequisites
 flowapp requires conda and uses conda-lock for environment management.
