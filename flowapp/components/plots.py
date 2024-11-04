@@ -75,7 +75,7 @@ def create_parity_plot(
             x=y_test_true,
             y=y_test_pred,
             mode="markers",
-            marker=dict(size=8, opacity=0.5),
+            marker=dict(size=8, opacity=0.5, color="orange"),
             name="test",
         )
     )

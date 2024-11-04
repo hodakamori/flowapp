@@ -1,6 +1,7 @@
 import tempfile
 from typing import Any
 
+import plotly.express as px
 import psi4
 from barfi import Block
 
@@ -30,9 +31,14 @@ def opt() -> Block:
             _, opt_wfn, history = psi4.optimize(
                 calc_level, return_wfn=True, return_history=True
             )
-        print(type(opt_wfn.molecule()))
         rdkit_mol = psi4mol_to_rdmol(opt_wfn.molecule())
-        self.set_interface(name="Out(energy)", value=history)
+        energy_values = history["energy"]
+        fig = px.line(
+            x=range(len(energy_values)),
+            y=energy_values,
+            labels={"x": "Step", "y": "Energy"},
+        )
+        self.set_interface(name="Out(energy)", value=fig)
         self.set_interface(name="Out(wfn)", value=opt_wfn)
         self.set_interface(name="Out(mol)", value=rdkit_mol)
 
