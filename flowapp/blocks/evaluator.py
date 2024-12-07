@@ -3,6 +3,8 @@ from typing import Any
 from barfi import Block
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
+from flowapp.utils.logger import log_exceptions
+
 
 def regression_score() -> Block:
     block = Block(name="Evaluator")
@@ -17,6 +19,7 @@ def regression_score() -> Block:
         items=["MAE", "R2", "RMSE"],
     )
 
+    @log_exceptions(block._name)
     def compute_func(self: Any) -> None:
         metric = self.get_option(name="select metric")
         y_true = self.get_interface(name="In(y_true, df)")

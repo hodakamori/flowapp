@@ -6,6 +6,7 @@ import psi4
 from barfi import Block
 
 from flowapp.utils.converter import psi4mol_to_rdmol, rdmol_to_psi4input
+from flowapp.utils.logger import log_exceptions
 
 
 def opt() -> Block:
@@ -21,6 +22,7 @@ def opt() -> Block:
         value="b3lyp/6-31g",
     )
 
+    @log_exceptions(block._name)
     def compute_func(self: Any) -> None:
         mol = self.get_interface(name="In(mol)")
         calc_level = self.get_option(name="select calc level")

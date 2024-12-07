@@ -68,6 +68,7 @@ def smiles_loader() -> Block:
     block.add_option(name="input SMILES", type="input")
     block.add_output(name="out(mol)")
 
+    @log_exceptions(block._name)
     def compute_func(self: Any) -> None:
         smiles = self.get_option(name="input SMILES")
         mol = Chem.MolFromSmiles(smiles)

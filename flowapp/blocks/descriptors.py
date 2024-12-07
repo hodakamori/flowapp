@@ -7,6 +7,8 @@ from rdkit import Chem
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 
+from flowapp.utils.logger import log_exceptions
+
 
 def onehot_encoding() -> Block:
     block = Block(name="One hot encoding")
@@ -17,6 +19,7 @@ def onehot_encoding() -> Block:
         type="input",
     )
 
+    @log_exceptions(block._name)
     def compute_func(self: Any) -> None:
         df = self.get_interface(name="In(df)")
         col = self.get_option(name="select y")
@@ -62,6 +65,7 @@ def smi2fp() -> Block:
         type="input",
     )
 
+    @log_exceptions(block._name)
     def compute_func(self: Any) -> None:
         df = self.get_interface(name="In(df)")
         col = self.get_option(name="select y")
