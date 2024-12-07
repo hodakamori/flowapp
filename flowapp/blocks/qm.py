@@ -1,3 +1,4 @@
+import os
 import tempfile
 from typing import Any
 
@@ -33,6 +34,7 @@ def opt() -> Block:
             _, opt_wfn, history = psi4.optimize(
                 calc_level, return_wfn=True, return_history=True
             )
+            os.remove("timer.dat")
         rdkit_mol = psi4mol_to_rdmol(opt_wfn.molecule())
         energy_values = history["energy"]
         fig = px.line(

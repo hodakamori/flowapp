@@ -54,9 +54,8 @@ def pdb_loader() -> Block:
     @log_exceptions(block._name)
     def compute_func(self: Any) -> None:
         path = self.get_option(name="select data to load")
-        mol = Chem.MolFromPDBFile(path)
-        mol = AllChem.AddHs(mol)
-        AllChem.EmbedMolecule(mol)
+        mol = Chem.MolFromPDBFile(path, removeHs=False)
+        self.set_interface(name="out(mol)", value=mol)
 
     block.add_compute(compute_func)
 
