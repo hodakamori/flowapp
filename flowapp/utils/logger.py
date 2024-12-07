@@ -1,8 +1,13 @@
+import functools
+import inspect
 import logging
 import os
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
-from typing import Optional, Type
+from typing import Callable, Optional, ParamSpec, Type, TypeVar
+
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
 class BlockExecutionLogger:
@@ -41,9 +46,7 @@ class BlockExecutionLogger:
         console_handler = logging.StreamHandler()
         console_handler.setLevel(logging.INFO)
 
-        formatter = logging.Formatter(
-            "[%(asctime)s] %(levelname)s [%(filename)s:%(lineno)d] %(message)s"
-        )
+        formatter = logging.Formatter("[%(asctime)s] %(levelname)s %(message)s")
         file_handler.setFormatter(formatter)
         console_handler.setFormatter(formatter)
 
@@ -58,3 +61,30 @@ class BlockExecutionLogger:
             cls._setup_logger()
         assert cls._logger is not None
         return cls._logger
+
+
+def log_exceptions(
+    name: Optional[str] = None,
+) -> Callable[[Callable[P, R]], Callable[P, R]]:
+    def decorator(func: Callable[P, R]) -> Callable[P, R]:
+        @functools.wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            logger = BlockExecutionLogger.get_logger()
+            file_name = os.path.split(inspect.getfile(func))[-1].split(".")[0]
+            prefix = f"[{file_name}-{name}] " if name else ""
+
+            try:
+                result = func(*args, **kwargs)
+                logger.info(f"{prefix}Successfully executed")
+                return result
+            except Exception as e:
+                logger.error(f"{prefix}Failed to load")
+                logger.error(e)
+                raise
+
+        return wrapper
+
+    if callable(name):
+        func, name = name, None
+        return decorator(func)
+    return decorator

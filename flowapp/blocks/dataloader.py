@@ -9,14 +9,13 @@ from dotenv import load_dotenv
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
-from flowapp.utils.logger import BlockExecutionLogger
+from flowapp.utils.logger import log_exceptions
 
 load_dotenv()
 
 
 def csv_loader() -> Block:
     block = Block(name="CSV")
-    logger = BlockExecutionLogger.get_logger()
 
     demo_files = glob.glob("demo/*.csv")
 
@@ -28,15 +27,11 @@ def csv_loader() -> Block:
     )
     block.add_output(name="out(df)")
 
+    @log_exceptions(block._name)
     def compute_func(self: Any) -> None:
-        try:
-            path = self.get_option(name="select data to load")
-            df = pd.read_csv(path)
-            self.set_interface(name="out(df)", value=df)
-            logger.info(f"{self._name}: Suucessfully loaded {path}")
-        except Exception as e:
-            logger.error(f"{self._name}: Failed to load {path}")
-            logger.error(e)
+        path = self.get_option(name="select data to load")
+        df = pd.read_csv(path)
+        self.set_interface(name="out(df)", value=df)
 
     block.add_compute(compute_func)
 
@@ -45,7 +40,6 @@ def csv_loader() -> Block:
 
 def pdb_loader() -> Block:
     block = Block(name="PDB")
-    logger = BlockExecutionLogger.get_logger()
 
     demo_files = glob.glob("demo/*.pdb")
 
@@ -57,17 +51,12 @@ def pdb_loader() -> Block:
     )
     block.add_output(name="out(mol)")
 
+    @log_exceptions(block._name)
     def compute_func(self: Any) -> None:
-        try:
-            path = self.get_option(name="select data to load")
-            mol = Chem.MolFromPDBFile(path)
-            mol = AllChem.AddHs(mol)
-            AllChem.EmbedMolecule(mol)
-            self.set_interface(name="out(mol)", value=mol)
-            logger.info(f"{self._name}: Suucessfully loaded {path}")
-        except Exception as e:
-            logger.error(f"{self._name}: Failed to load {path}")
-            logger.error(e)
+        path = self.get_option(name="select data to load")
+        mol = Chem.MolFromPDBFile(path)
+        mol = AllChem.AddHs(mol)
+        AllChem.EmbedMolecule(mol)
 
     block.add_compute(compute_func)
 
