@@ -34,7 +34,7 @@ upload_root_path.mkdir(exist_ok=True)
 with st.sidebar:
     file_uploader(upload_root_path, st.session_state.session_id)
 
-col1, col2 = st.columns([7, 3])
+col1, col2 = st.columns([6, 4])
 
 with col1:
     st.header("Flow")
