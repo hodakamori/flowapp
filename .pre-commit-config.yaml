@@ -41,14 +41,13 @@ repos:
   -   repo: https://github.com/pre-commit/mirrors-mypy
       rev: v1.7.0
       hooks:
-      # Run the mypy.
       - id: mypy
         name: mypy
         description: "Run 'mypy' for Python linting"
         entry: mypy
         language: python
         args: [--strict, --ignore-missing-imports]
+        exclude: "_pb2(.pyi|.py|_grpc.py)$"
         require_serial: true
-        # Add types package list
         additional_dependencies: []
         minimum_pre_commit_version: '2.9.2'
