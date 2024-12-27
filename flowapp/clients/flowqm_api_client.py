@@ -1,3 +1,4 @@
+import json
 from typing import Any, Dict, Optional
 
 import grpc
@@ -51,8 +52,9 @@ class QMClient:
         optimized_mol = self._update_rdkit_mol_coords(rdkit_mol, response.atoms)
 
         energy = response.energy
-
-        return energy, optimized_mol
+        additional_data = response.additional_data
+        additional_data = json.loads(additional_data)
+        return energy, optimized_mol, additional_data
 
     def _convert_rdkit_mol_to_atoms(self, rdkit_mol: rdchem.Mol):
         elements = []

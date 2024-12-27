@@ -7,7 +7,6 @@ from typing import Any, Dict, Tuple
 import grpc
 import numpy as np
 import psi4
-
 from flowqm import qm_pb2, qm_pb2_grpc
 
 
