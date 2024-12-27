@@ -88,6 +88,7 @@ extend-ignore = [
 
 [tool.mypy]
 disable_error_code = ["import-untyped"]
+<<<<<<< HEAD
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
@@ -97,3 +98,8 @@ ignore_missing_imports = true
 [[tool.mypy.overrides]]
 module = "psi4.*"
 ignore_missing_imports = true
+=======
+[[tool.mypy.overrides]]
+module = ["qm_pb2", "qm_pb2_grpc"]
+ignore_errors = true
+>>>>>>> 3f8945d099f4b644291aa0e5f138e03e84d8da58

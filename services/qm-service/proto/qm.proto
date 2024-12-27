@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package qm;
+
+service QMService {
+  rpc CalculateQM (QMRequest) returns (QMResponse) {}
+}
+
+message Cell {
+  repeated double values = 1 [packed=true]; 
+}
+
+message Atoms {
+  repeated string elements = 1;     
+  repeated double coordinates = 2;  
+  int32 charge = 3;                
+  int32 multiplicity = 4; 
+  optional bool pbc = 5;    
+  optional Cell cell = 6;
+}
+
+message CalculationParams {
+  string calc_type = 1;
+  string theory_level = 2;
+  string basis_set = 3;
+  map<string, string> additional_params = 4;
+}
+
+message QMRequest {
+  Atoms atoms = 1;
+  CalculationParams params = 2;
+}
+
+message QMResponse {
+  bool success = 1;        
+  string error_message = 2; 
+  Atoms atoms = 3;          
+  double energy = 4;        
+  string additional_data = 5;
+}
