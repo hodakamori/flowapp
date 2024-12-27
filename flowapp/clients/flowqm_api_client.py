@@ -8,7 +8,7 @@ from rdkit.Chem import AllChem, rdchem
 
 
 class QMClient:
-    def __init__(self, host: str = "localhost", port: int = 50051):
+    def __init__(self, host: str = "flowqm", port: int = 50051):
         """Flowqm client."""
         self.channel = grpc.insecure_channel(f"{host}:{port}")
         self.stub = qm_pb2_grpc.QMServiceStub(self.channel)

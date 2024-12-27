@@ -5,20 +5,18 @@ services:
     build: .
     ports:
       - "8501:8501"
-    volumes:
-      - .:/app
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
-    command: ["/bin/bash", "-c", "source activate flowapp && streamlit run flowapp/app.py"]
+    command:  ["rye", "run", "streamlit", "run", "flowapp/app.py"]
 
-  qm-service:
+  flowqm:
     build:
       context: .
-      dockerfile: services/qm-service/Dockerfile
+      dockerfile: services/flowqm/Dockerfile
     ports:
       - "50051:50051"
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
-    command: ["python", "service.py"]
+    command: ["python", "/app/services/flowqm/service.py"]

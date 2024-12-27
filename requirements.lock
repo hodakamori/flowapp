@@ -88,7 +88,7 @@ ipykernel==6.29.5
     # via jupyterlab
 ipyspeck==0.6.1
     # via stmol
-ipython==8.31.0
+ipython==8.18.1
     # via ipykernel
     # via ipywidgets
 ipython-genutils==0.2.0
@@ -180,14 +180,14 @@ nbformat==5.10.4
     # via nbconvert
 nest-asyncio==1.6.0
     # via ipykernel
-networkx==3.4.2
+networkx==3.2.1
     # via barfi
 notebook==7.3.2
     # via widgetsnbextension
 notebook-shim==0.2.4
     # via jupyterlab
     # via notebook
-numpy==2.2.1
+numpy==2.0.2
     # via pandas
     # via pydeck
     # via rdkit
@@ -288,7 +288,7 @@ rpds-py==0.22.3
     # via referencing
 scikit-learn==1.6.0
     # via flowapp
-scipy==1.14.1
+scipy==1.13.1
     # via scikit-learn
 send2trash==1.8.3
     # via jupyter-server

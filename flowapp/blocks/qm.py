@@ -32,7 +32,7 @@ def opt() -> Block:
         mol = self.get_interface(name="In(mol)")
         basis_set = self.get_option(name="Basis set")
         theory = self.get_option(name="Theory")
-        client = QMClient(host="localhost", port=50051)
+        client = QMClient(host="flowqm", port=50051)
         energy, optimized_mol, additional_data = client.compute_func(
             rdkit_mol=mol,
             calc_type="opt",
