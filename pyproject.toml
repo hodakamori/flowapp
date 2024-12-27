@@ -20,6 +20,10 @@ packages = ["flowapp"]
 
 [tool.ruff]
 line-length = 88
+exclude = [
+    "*_pb2.py",
+    "*_pb2_grpc.py",
+]
 
 [tool.ruff.lint]
 extend-select = [
@@ -84,3 +88,12 @@ extend-ignore = [
 
 [tool.mypy]
 disable_error_code = ["import-untyped"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "rdkit.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "psi4.*"
+ignore_missing_imports = true
