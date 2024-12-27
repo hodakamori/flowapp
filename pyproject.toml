@@ -7,6 +7,30 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
+dependencies = [
+    "python-dotenv>=1.0.1",
+    "streamlit>=1.41.1",
+    "barfi>=0.7.0",
+    "rdkit>=2024.3.6",
+    "scikit-learn>=1.6.0",
+    "plotly>=5.24.1",
+    "py3dmol>=2.4.2",
+    "stmol>=0.0.9",
+    "ipython-genutils>=0.2.0",
+    "pip>=24.3.1",
+    "grpcio>=1.68.1",
+]
+
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "ruff>=0.7.1",
+    "isort>=5.13.2",
+    "black>=24.10.0",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.1",
+]
 
 [build-system]
 requires = ["hatchling"]
@@ -20,6 +44,10 @@ packages = ["flowapp"]
 
 [tool.ruff]
 line-length = 88
+exclude = [
+    "*_pb2.py",
+    "*_pb2_grpc.py",
+]
 
 [tool.ruff.lint]
 extend-select = [
@@ -84,3 +112,12 @@ extend-ignore = [
 
 [tool.mypy]
 disable_error_code = ["import-untyped"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "rdkit.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "psi4.*"
+ignore_missing_imports = true
