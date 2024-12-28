@@ -1,9 +1,9 @@
 from typing import Any
 
 from barfi import Block
-from sklearn.linear_model import LinearRegression
 
 from flowapp.utils.logger import log_exceptions
+from flowapp.utils.regressor import RegressionTrainer, available_models
 
 
 def train_regression() -> Block:
@@ -11,7 +11,7 @@ def train_regression() -> Block:
     block.add_option(
         name="select model",
         type="select",
-        items=["Linear"],
+        items=["Linear", "Lasso", "Ridge", "SVR", "PLS", "RandomForest"],
     )
 
     block.add_input(name="In(X, df)")
@@ -22,11 +22,14 @@ def train_regression() -> Block:
     def compute_func(self: Any) -> None:
         X = self.get_interface(name="In(X, df)")
         y = self.get_interface(name="In(y, df)")
-        model = self.get_option(name="select model")
-        if model == "Linear":
-            model = LinearRegression()
-            model.fit(X, y)
-        self.set_interface(name="Out(model)", value=model)
+        model_type = self.get_option(name="select model")
+
+        trainer = RegressionTrainer(
+            model_type=available_models[model_type],
+        )
+        trained_model = trainer.train(X, y)
+
+        self.set_interface(name="Out(model)", value=trained_model)
 
     block.add_compute(compute_func)
     return block
