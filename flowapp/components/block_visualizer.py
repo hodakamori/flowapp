@@ -25,11 +25,12 @@ def visualize_block_details(barfi_result: Dict[Any, Any]) -> None:
                     value = barfi_result[block_name]["block"].get_interface(
                         selected_key
                     )
-
-                    if isinstance(value, py3Dmol.view):
-                        showmol(value)
-                    else:
-                        st.write(value)
+                    with st.container():
+                        st.write("\n" * 2)
+                        if isinstance(value, py3Dmol.view):
+                            showmol(value)
+                        else:
+                            st.write(value)
 
             else:
                 st.info("No input/output keys available for this block.")
