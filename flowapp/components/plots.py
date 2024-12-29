@@ -1,115 +1,134 @@
+import altair as alt
 import pandas as pd
-import plotly.graph_objects as go
+import streamlit as st
 
 
-def column_selectable_scatter(df: pd.DataFrame) -> go.Figure:
-    default_x = df.columns[0]
-    default_y = df.columns[1]
+def truncate_text(text):
+    if isinstance(text, str) and len(text) > 10:
+        return text[:10] + "..."
+    return text
 
-    fig = go.Figure()
 
-    fig.add_trace(
-        go.Scatter(
-            x=df[default_x], y=df[default_y], mode="markers", marker=dict(size=8)
+def column_selectable_scatter(df: pd.DataFrame) -> alt.Chart:
+    df = df.map(truncate_text)
+
+    x_dropdown = alt.param(
+        name="x_axis",
+        bind=alt.binding_select(
+            options=df.columns, name="X-axis:", element="#column-selectable-scatter-X"
+        ),
+        value=df.columns[0],
+    )
+    y_dropdown = alt.param(
+        name="y_axis",
+        bind=alt.binding_select(
+            options=df.columns, name="Y-axis:", element="#column-selectable-scatter-Y"
+        ),
+        value=df.columns[1],
+    )
+
+    scatter = (
+        alt.Chart(df)
+        .mark_point()
+        .encode(
+            x=alt.X(
+                "x:Q",
+                title="X-axis",
+                axis=alt.Axis(
+                    titleY=-10,
+                    labelPadding=-25,
+                    offset=35,
+                ),
+            ),
+            y=alt.Y(
+                "y:Q",
+                title="Y-axis",
+                axis=alt.Axis(
+                    titleX=-10,
+                    labelPadding=-25,
+                    offset=35,
+                ),
+            ),
         )
+        .transform_calculate(x="datum[x_axis]", y="datum[y_axis]")
+        .add_params(x_dropdown, y_dropdown)
+        .properties(
+            height=400,
+            width=500,
+            padding={"left": 30, "top": 30, "right": 30, "bottom": 20},
+        )
+        .interactive()
     )
-
-    x_buttons = []
-    for col in df.columns:
-        x_buttons.append(dict(args=[{"x": [df[col]]}], label=col, method="restyle"))
-
-    y_buttons = []
-    for col in df.columns:
-        y_buttons.append(dict(args=[{"y": [df[col]]}], label=col, method="restyle"))
-
-    updatemenus = [
-        dict(
-            buttons=x_buttons,
-            direction="down",
-            showactive=True,
-            y=1.15,
-            pad={"r": 10, "t": 10},
-            name="X-axis",
-            xanchor="left",
-            yanchor="top",
-        ),
-        dict(
-            buttons=y_buttons,
-            direction="down",
-            showactive=True,
-            y=1.15,
-            pad={"r": 10, "t": 10},
-            name="Y-axis",
-            xanchor="right",
-            yanchor="top",
-        ),
-    ]
-
-    fig.update_layout(
-        updatemenus=updatemenus,
-        xaxis_title=default_x,
-        yaxis_title=default_y,
-        height=600,
+    st.markdown(
+        """
+        <style>
+            #column-selectable-scatter-X, #column-selectable-scatter-Y {
+                margin-bottom: 10px;
+                margin-right: 10px;
+                text-align: left;
+            }
+            select {
+                font-size: 14px;
+                padding: 5px;
+                margin-left:10px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                text-align: left;
+                min-width: 200px; 
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
     )
-    return fig
+    return scatter
 
 
 def create_parity_plot(
-    y_train_true: pd.DataFrame,
-    y_train_pred: pd.DataFrame,
-    y_test_true: pd.DataFrame,
-    y_test_pred: pd.DataFrame,
-) -> go.Figure:
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=y_train_true,
-            y=y_train_pred,
-            mode="markers",
-            marker=dict(size=8, opacity=0.5),
-            name="train",
-        )
+    y_train_true: pd.Series,
+    y_train_pred: pd.Series,
+    y_test_true: pd.Series,
+    y_test_pred: pd.Series,
+) -> alt.Chart:
+    df_train = pd.DataFrame(
+        {"actual": y_train_true, "predicted": y_train_pred, "type": "train"}
     )
-    fig.add_trace(
-        go.Scatter(
-            x=y_test_true,
-            y=y_test_pred,
-            mode="markers",
-            marker=dict(size=8, opacity=0.5, color="orange"),
-            name="test",
-        )
+    df_test = pd.DataFrame(
+        {"actual": y_test_true, "predicted": y_test_pred, "type": "test"}
     )
-    min_val = min(
-        y_train_true.min() if y_train_true is not None else float("inf"),
-        y_train_pred.min() if y_train_pred is not None else float("inf"),
-        y_test_true.min() if y_test_true is not None else float("inf"),
-        y_test_pred.min() if y_test_pred is not None else float("inf"),
+    df = pd.concat([df_train, df_test], ignore_index=True)
+
+    min_val = float(min(df["actual"].min(), df["predicted"].min()))
+    max_val = float(max(df["actual"].max(), df["predicted"].max()))
+
+    df_line = pd.DataFrame(
+        {"actual": [min_val, max_val], "predicted": [min_val, max_val]}
     )
-    max_val = max(
-        y_train_true.max() if y_train_true is not None else float("-inf"),
-        y_train_pred.max() if y_train_pred is not None else float("-inf"),
-        y_test_true.max() if y_test_true is not None else float("-inf"),
-        y_test_pred.max() if y_test_pred is not None else float("-inf"),
-    )
-    fig.add_trace(
-        go.Scatter(
-            x=[min_val, max_val],
-            y=[min_val, max_val],
-            mode="lines",
-            line=dict(color="gray", dash="dash"),
-            name="y=x",
+
+    points = (
+        alt.Chart(df)
+        .mark_point(opacity=0.5, size=60)
+        .encode(
+            x=alt.X(
+                "predicted",
+                title="Predicted",
+                scale=alt.Scale(domain=[min_val, max_val]),
+            ),
+            y=alt.Y(
+                "actual", title="Actual", scale=alt.Scale(domain=[min_val, max_val])
+            ),
+            color=alt.Color("type:N", title="Data"),
+            tooltip=["type", "actual", "predicted"],
         )
     )
 
-    fig.update_layout(
-        xaxis=dict(
-            title="Predicted", scaleanchor="y", scaleratio=1, range=[min_val, max_val]
-        ),
-        yaxis=dict(
-            title="Actual", scaleanchor="x", scaleratio=1, range=[min_val, max_val]
-        ),
-        legend=dict(title="Data"),
-        margin=dict(l=0, r=0, t=50, b=50),
+    line = (
+        alt.Chart(df_line)
+        .mark_line(color="gray", strokeDash=[5, 5])
+        .encode(x="predicted", y="actual")
     )
 
-    return fig
+    chart = (points + line).properties(width=500, height=400).interactive()
+
+    return chart

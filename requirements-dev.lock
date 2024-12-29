@@ -11,6 +11,7 @@
 
 -e file:.
 altair==5.5.0
+    # via flowapp
     # via streamlit
 anyio==4.7.0
     # via httpx
@@ -204,7 +205,8 @@ notebook==7.3.2
 notebook-shim==0.2.4
     # via jupyterlab
     # via notebook
-numpy==2.0.2
+numpy==1.26.4
+    # via flowapp
     # via pandas
     # via pydeck
     # via rdkit
