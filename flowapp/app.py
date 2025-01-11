@@ -4,8 +4,6 @@ from pathlib import Path
 
 import streamlit as st
 from barfi.flow import ComputeEngine, SchemaManager
-
-# from barfi import barfi_schemas
 from barfi.flow.streamlit import st_flow
 from dotenv import load_dotenv
 
@@ -73,7 +71,9 @@ blocks = {
 with col1:
     st.header("Flow")
     schema_manager = SchemaManager(filepath="./schemas")
-    load_schema = st.selectbox("Select a saved schema:", schema_manager.schema_names)
+    load_schema = st.selectbox(
+        "Select a saved schema:", [""] + schema_manager.schema_names
+    )
     if load_schema and load_schema != "None":
         flow_schema = schema_manager.load_schema(load_schema)
         barfi_result = st_flow(blocks=blocks, editor_schema=flow_schema)
