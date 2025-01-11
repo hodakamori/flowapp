@@ -1,7 +1,7 @@
 from typing import Any
 
 import py3Dmol
-from barfi import Block
+from barfi.flow import Block
 from rdkit import Chem
 
 from flowapp.components.plots import column_selectable_scatter, create_parity_plot
@@ -14,7 +14,7 @@ def scatter() -> Block:
     block.add_output(name="Figure")
     block.add_output(name="Columns")
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         df = self.get_interface(name="In(df)")
 
@@ -35,7 +35,7 @@ def parity_plot() -> Block:
     block.add_input(name="In(y_test_pred)")
     block.add_output(name="Figure")
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         y_train_true = self.get_interface(name="In(y_train_true)")
         y_train_pred = self.get_interface(name="In(y_train_pred)")
@@ -54,7 +54,7 @@ def view_mol3d() -> Block:
     block.add_input(name="In(mol)")
     block.add_output(name="Figure")
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         mol = self.get_interface(name="In(mol)")
         sdf2 = Chem.MolToMolBlock(mol)

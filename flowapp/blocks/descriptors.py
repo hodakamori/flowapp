@@ -2,7 +2,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
-from barfi import Block
+from barfi.flow import Block
 from rdkit import Chem
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
@@ -19,7 +19,7 @@ def onehot_encoding() -> Block:
         type="input",
     )
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         df = self.get_interface(name="In(df)")
         col = self.get_option(name="select y")
@@ -65,7 +65,7 @@ def smi2fp() -> Block:
         type="input",
     )
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         df = self.get_interface(name="In(df)")
         col = self.get_option(name="select y")

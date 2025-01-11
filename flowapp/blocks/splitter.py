@@ -1,7 +1,7 @@
 from typing import Any
 
 import pandas as pd
-from barfi import Block
+from barfi.flow import Block
 from sklearn.model_selection import train_test_split
 
 from flowapp.utils.logger import log_exceptions
@@ -14,7 +14,7 @@ def train_test_splitter() -> Block:
     block.add_output(name="Test(df)")
     block.add_option(name="test size", type="number", value=0.2)
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         df = self.get_interface(name="In(df)")
         test_size = self.get_option(name="test size")

@@ -1,6 +1,6 @@
 from typing import Any
 
-from barfi import Block
+from barfi.flow import Block
 
 from flowapp.utils.logger import log_exceptions
 
@@ -16,7 +16,7 @@ def xy_selecter() -> Block:
         type="input",
     )
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         df = self.get_interface(name="In(df)")
         y_col = self.get_option(name="select y")

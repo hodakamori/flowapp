@@ -3,7 +3,7 @@ from typing import Any
 import plotly.express as px
 
 # import psi4
-from barfi import Block
+from barfi.flow import Block
 
 from flowapp.clients.flowqm_api_client import QMClient
 from flowapp.utils.logger import log_exceptions
@@ -27,7 +27,7 @@ def opt() -> Block:
         value="b3lyp",
     )
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         mol = self.get_interface(name="In(mol)")
         basis_set = self.get_option(name="Basis set")

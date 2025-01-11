@@ -1,6 +1,6 @@
 from typing import Any
 
-from barfi import Block
+from barfi.flow import Block
 
 
 def save_as_csv() -> Block:

@@ -4,7 +4,7 @@ from typing import Any
 
 import pandas as pd
 import streamlit as st
-from barfi import Block
+from barfi.flow import Block
 from dotenv import load_dotenv
 from rdkit import Chem
 from rdkit.Chem import AllChem
@@ -27,7 +27,7 @@ def csv_loader() -> Block:
     )
     block.add_output(name="out(df)")
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         path = self.get_option(name="select data to load")
         df = pd.read_csv(path)
@@ -51,7 +51,7 @@ def pdb_loader() -> Block:
     )
     block.add_output(name="out(mol)")
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         path = self.get_option(name="select data to load")
         mol = Chem.MolFromPDBFile(path, removeHs=False)
@@ -67,7 +67,7 @@ def smiles_loader() -> Block:
     block.add_option(name="input SMILES", type="input")
     block.add_output(name="out(mol)")
 
-    @log_exceptions(block._name)
+    @log_exceptions(block.name)
     def compute_func(self: Any) -> None:
         smiles = self.get_option(name="input SMILES")
         mol = Chem.MolFromSmiles(smiles)
