@@ -3,7 +3,7 @@ import uuid
 from pathlib import Path
 
 import streamlit as st
-from barfi.flow import ComputeEngine
+from barfi.flow import ComputeEngine, SchemaManager
 
 # from barfi import barfi_schemas
 from barfi.flow.streamlit import st_flow
@@ -38,50 +38,61 @@ with st.sidebar:
     file_uploader(upload_root_path, st.session_state.session_id)
 
 col1, col2 = st.columns([6, 4])
+blocks = {
+    "Data": [
+        csv_loader(),
+        pdb_loader(),
+        smiles_loader(),
+    ],
+    "Statistics": [
+        profiling(),
+    ],
+    "Modifier": [scaler(), dropna(), dropcolumn(), onehot_encoding(), smi2fp()],
+    "Selecter": [
+        train_test_splitter(),
+        xy_selecter(),
+    ],
+    "QM": [
+        opt(),
+    ],
+    "ML": [
+        train_regression(),
+        predict(),
+        regression_score(),
+    ],
+    "Visualize": [
+        scatter(),
+        parity_plot(),
+        view_mol3d(),
+    ],
+    "Othres": [
+        save_as_csv(),
+    ],
+}
 
 with col1:
     st.header("Flow")
-    # saved_schemas: List[str] = barfi_schemas()
-    # load_schema = st.selectbox("Select a saved schema:", saved_schemas)
-    blocks = {
-        "Data": [
-            csv_loader(),
-            pdb_loader(),
-            smiles_loader(),
-        ],
-        "Statistics": [
-            profiling(),
-        ],
-        "Modifier": [scaler(), dropna(), dropcolumn(), onehot_encoding(), smi2fp()],
-        "Selecter": [
-            train_test_splitter(),
-            xy_selecter(),
-        ],
-        "QM": [
-            opt(),
-        ],
-        "ML": [
-            train_regression(),
-            predict(),
-            regression_score(),
-        ],
-        "Visualize": [
-            scatter(),
-            parity_plot(),
-            view_mol3d(),
-        ],
-        "Othres": [
-            save_as_csv(),
-        ],
-    }
-    barfi_result = st_flow(
-        blocks=blocks
-        # compute_engine=True,
-        # load_schema=load_schema,
-    )
+    schema_manager = SchemaManager(filepath="./schemas")
+    load_schema = st.selectbox("Select a saved schema:", schema_manager.schema_names)
+    if load_schema and load_schema != "None":
+        flow_schema = schema_manager.load_schema(load_schema)
+        barfi_result = st_flow(blocks=blocks, editor_schema=flow_schema)
+    else:
+        barfi_result = st_flow(blocks=blocks)
     compute_engine = ComputeEngine(blocks)
 
-    # 07: Reference to the flow_schema from the barfi_result
+    @st.dialog("Save schema")
+    def save_schema(barfi_result):
+        placeholder = load_schema if load_schema else ""
+        saved_name = st.text_input("Plese input name:", value=placeholder)
+        if st.button("Save"):
+            if saved_name in schema_manager.schema_names:
+                schema_manager.update_schema(saved_name, barfi_result.editor_schema)
+            else:
+                schema_manager.save_schema(saved_name, barfi_result.editor_schema)
+
+    if barfi_result.command == "save":
+        save_schema(barfi_result)
     flow_schema = barfi_result.editor_schema
     compute_engine.execute(flow_schema)
 
