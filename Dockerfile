@@ -18,6 +18,6 @@ WORKDIR /app
 COPY . .
 RUN rye pin "$(cat .python-version)" && \
     rye sync --no-lock && \
-    rye run pip install services/flowqm .
+    rye run pip install services/flowqm
 
 EXPOSE 8501

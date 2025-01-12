@@ -389,7 +389,6 @@ statsmodels==0.14.4
 stmol==0.0.9
     # via flowapp
 streamlit==1.41.1
-    # via barfi
     # via flowapp
     # via stmol
 tenacity==9.0.0

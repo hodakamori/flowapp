@@ -7,4 +7,5 @@ name = "flowqm"
 authors = [{name = "Hodaka Mori"}]
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
-dynamic = ["version", "description"]
+version = "0.1.0"
+description = "flowqm"
