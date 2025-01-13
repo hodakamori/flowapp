@@ -18,3 +18,12 @@ services:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
     command: ["python", "service.py"]
+
+  manager:
+    build: ./flowapp_manager
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    command:  ["python", "app.py"]

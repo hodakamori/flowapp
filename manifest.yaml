@@ -1,79 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: flowapp
+  name: flowapp-manager
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flowapp
+      app: flowapp-manager
   template:
     metadata:
       labels:
-        app: flowapp
+        app: flowapp-manager
     spec:
       containers:
-      - name: flowapp
-        image: flowapp:latest
+      - name: flowapp-manager
+        image: flowapp-manager:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 8501
         env:
         - name: PYTHONUNBUFFERED
           value: "1"
-        - name: FLOWQM_HOST
-          value: "flowqm" # flowqm サービス名を使用
-        command: ["rye", "run", "streamlit", "run", "flowapp/app.py"]
-      restartPolicy: Always
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: flowqm
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: flowqm
-  template:
-    metadata:
-      labels:
-        app: flowqm
-    spec:
-      containers:
-      - name: flowqm
-        image: flowqm:latest
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 50051
-        env:
-        - name: PYTHONUNBUFFERED
-          value: "1"
-        command: ["python", "/app/services/flowqm/service.py"]
+        command: ["streamlit", "run", "/app/app.py"]
       restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: flowapp
+  name: flowapp-manager
 spec:
   selector:
-    app: flowapp
+    app: flowapp-manager
   ports:
   - protocol: TCP
     port: 8501
     targetPort: 8501
-  type: NodePort
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: flowqm
-spec:
-  selector:
-    app: flowqm
-  ports:
-  - protocol: TCP
-    port: 50051
-    targetPort: 50051
   type: NodePort
